@@ -1,0 +1,33 @@
+[palette]
+
+# the default color for the most common element. a typical example is
+# the text in a code editor.
+normal = "#ffffff"
+
+# the background in relation to the normal color.
+backdrop = "#000000"
+
+# the accent color is a prominent color, that give a theme its identity.
+accent = "#800080"
+
+# when elements, that are by default normal, need special attention, they become important. this color signals, that the system demands attention from the human, regarding some element.
+important = "#0000ff"
+
+# focused elements are usually in the process of being modified by the human. it represents those elements, that the human wants to pay attention to.
+focus = "#00ff00"
+
+# Errors are nonnegotiable and urgent.
+# The color should be very aggressive and visible.
+error = "#ff0000"
+
+# Infos are context relevant suggestions.
+# The color should be relaxed and easy to ignore.
+info = "#00ffff"
+
+# Warnings are likely to be problems, but they are not urgent.
+# The color should be distracting, but also ignorable.
+warning = "#ffff00"
+
+# sometimes it is not obvious where a color will show up in applications.
+# this color is meant to be easy to spot.
+debug = "#ff00ff"
