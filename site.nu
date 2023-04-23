@@ -9,14 +9,14 @@ def to-divs [] {
   let bright = ($color.value | brighten | str trim)
   $"<div class='color_rect' style='background-color: ($color.value)'>
   <span class='color_name grow' onclick='copy\(\"($color.value)\"\)'>($color.name) ($color.value)</span>
-  <span class='color_name grow' onclick='copy\(\"($bright)\"\)' style='color:black; background-color: ($bright)'>🔆 ($bright)</span>
+  <span class='color_name grow' onclick='copy\(\"($bright)\"\)' style='color:white; background-color: ($bright)'>🔆 ($bright)</span>
   </div>"
   } |
   str collect (char newline)
 }
 
-export def html [] {
-	let palette = ( open output/dark.toml | get palette )
+export def html [ theme: string ] {
+	let palette = ( open $"output/($theme).toml" | get palette )
 	let palette_colors = ( $palette | reject content ui )
 	let content_colors = ( $palette | get content )
 	let ui_colors = ( $palette | get ui )
@@ -24,6 +24,8 @@ export def html [] {
 	let global_color_divs = ( $palette_colors | to-divs )
 	let content_color_divs = ( $content_colors | to-divs )
 	let ui_color_divs = ( $ui_colors | to-divs )
+  let backdrop = if $theme == "dark" { "black" } else { "white" }
+  let normal = if $theme == "dark" { "white" } else { "black" }
 
   $"
   <!DOCTYPE html>
@@ -36,11 +38,11 @@ export def html [] {
   </script>
   <style>
   :root {
-    background-color: black;
+    background-color: ($backdrop);
   }
   h1, h2 {
     font-family: serif;
-    color: white;
+    color: $normal;
   }
   h1::before {
     content: '# ';
@@ -59,7 +61,7 @@ export def html [] {
   .color_rect {
     width: 270px;
     height: 250px;
-    border: white 5px solid;
+    border: ($normal) 5px solid;
     border-radius: 8px;
     display: inline-flex;
   }
@@ -70,7 +72,7 @@ export def html [] {
     color: white;
     opacity: 0.66;
     border-radius: 8px;
-    background-color: black;
+    background-color: $normal;
     padding: 8px;
     place-self: end;
   }
@@ -79,7 +81,7 @@ export def html [] {
   }
   .grow:hover {
     cursor: pointer;
-    border: white 2px solid;
+    border: $normal 2px solid;
     transform: scale\(1.666\);
     z-index: 999;
   }

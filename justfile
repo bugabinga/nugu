@@ -1,16 +1,35 @@
 set shell := [ "nu", "--commands" ]
+
 default:
-    @just --list
+	@just --list
+
 lint:
-    taplo lint
-    nu-check --as-module --debug nugu.nu
-    nu-check --as-module --debug site.nu
-fmt:
-    taplo fmt
+	taplo lint
+	open nugu.nu | nu-check --as-module --debug nugu.nu
+	open site.nu | nu-check --as-module --debug site.nu
+	open helix.nu | nu-check --as-module --debug helix.nu
+
+fmt: lint
+	taplo fmt
+
 output := 'output'
-build:
-		rm --force --recursive {{output}}
-		mkdir {{output}}
-		use nugu.nu; nugu dark  | to toml | save --raw {{output}}/dark.toml
-		use nugu.nu; nugu light | to toml | save --raw {{output}}/light.toml
-		use site.nu; site html  | save --raw {{output}}/site.html
+
+build: fmt
+	rm --force --recursive {{output}}
+	mkdir {{output}}
+	use nugu.nu; nugu dark  | to toml | save --raw {{output}}/dark.toml
+	use nugu.nu; nugu light | to toml | save --raw {{output}}/light.toml
+
+html: build
+	use site.nu; site html light | save --raw {{output}}/site-light.html
+	use site.nu; site html dark  | save --raw {{output}}/site-dark.html
+
+open: html
+	firefox --new-window {{output}}/site-dark.html
+	firefox --new-window {{output}}/site-light.html
+
+helix: build
+	rm --force --recursive {{output}}/helix
+	mkdir {{output}}/helix
+	use helix.nu; helix theme dark  | save --raw {{output}}/helix/nugu-dark.toml
+	use helix.nu; helix theme light | save --raw {{output}}/helix/nugu-light.toml

@@ -325,8 +325,8 @@ export def light [] {
 							| str trim
 							)
 	let ui_backdrop = (
-							$base.backdrop 
-							| pastel lighten ($lightness * 2)
+							$base.normal
+							| pastel darken ($darkness * 4)
 							| pastel format hex
 							| str trim
 							)
