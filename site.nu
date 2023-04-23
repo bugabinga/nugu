@@ -12,7 +12,7 @@ def to-divs [] {
   <span class='color_name grow' onclick='copy\(\"($bright)\"\)' style='color:white; background-color: ($bright)'>🔆 ($bright)</span>
   </div>"
   } |
-  str collect (char newline)
+  str join (char newline)
 }
 
 export def html [ theme: string ] {
