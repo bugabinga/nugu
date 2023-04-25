@@ -71,10 +71,10 @@ def make-palette [
 export def dark [] {
 	let base = (open base.toml | get palette)
 
-	let darkness = 0.210
+	let darkness = 0.190
 	let lightness = 0.076
-	let saturation = 0.247
-	let mix = 0.3
+	let saturation = 0.087
+	let mix = 0.33
 
 	let error = (
 							$base.error 
@@ -116,14 +116,13 @@ export def dark [] {
 							)
 	let content_accent = (
 							$base.accent 
-							| pastel desaturate $saturation
-							| pastel lighten $lightness
 							| pastel format hex
 							| str trim
 							)
 	let content_minor = (
 							$base.normal
-							| pastel darken ($darkness * 2)
+							| pastel mix --fraction $mix $base.backdrop 
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
@@ -137,8 +136,9 @@ export def dark [] {
 							)
 	let content_unfocus = (
 							$base.focus
-							| pastel mix --fraction $mix $content_normal
+							| pastel mix --fraction $mix $content_backdrop
 							| pastel mix --fraction $mix $base.important
+							| pastel desaturate $saturation 
 							| pastel darken $darkness
 							| pastel format hex
 							| str trim
@@ -147,8 +147,8 @@ export def dark [] {
 							$base.important
 							| pastel mix --fraction $mix $content_normal
 							| pastel mix --fraction $mix $base.important
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten $lightness
+							| pastel mix --fraction $mix $base.accent
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
@@ -156,67 +156,65 @@ export def dark [] {
 							$base.important
 							| pastel mix --fraction $mix $content_normal
 							| pastel mix --fraction $mix $base.important
-							| pastel lighten ($lightness * 3)
+							| pastel mix --fraction $mix $base.accent
+							| pastel lighten $lightness 
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
 
 
 	let ui_normal = (
-							$base.normal 
-							| pastel darken ($darkness * 2)
+							$content_normal 
+							| pastel lighten $lightness 
 							| pastel format hex
 							| str trim
 							)
 	let ui_backdrop = (
-							$base.backdrop 
-							| pastel lighten ($lightness * 2)
+							$content_backdrop 
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
 	let ui_accent = (
-							$base.accent 
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten $lightness
+							$content_accent 
+							| pastel darken $darkness 
+							| pastel desaturate $saturation
 							| pastel format hex
 							| str trim
 							)
 	let ui_minor = (
-							$base.normal 
-							| pastel darken ($darkness * 3)
+							$content_normal 
+							| pastel darken $darkness 
+							| pastel desaturate $saturation
 							| pastel format hex
 							| str trim
 							)
 	let ui_focus = (
-							$base.focus 
+							$content_focus 
+							| pastel darken $darkness 
 							| pastel desaturate $saturation
-							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel darken $darkness
 							| pastel format hex
 							| str trim
 							)
 	let ui_unfocus = (
-							$base.focus 
+							$content_unfocus 
+							| pastel darken $darkness 
 							| pastel desaturate $saturation
-							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel darken ($darkness * 2)
 							| pastel format hex
 							| str trim
 							)
 	let ui_important_local = (
-							$base.important
-							| pastel mix --fraction $mix $content_normal
-							| pastel desaturate ($saturation * 2)
+							$content_important_local
+							| pastel darken $darkness 
+							| pastel desaturate $saturation
 							| pastel format hex
 							| str trim
 							)
 	let ui_important_global = (
-							$base.important
-							| pastel mix --fraction $mix $content_normal
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten ($lightness * 2)
+							$content_important_global
+							| pastel darken $darkness 
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
@@ -227,16 +225,16 @@ export def dark [] {
 export def light [] {
 	let base = (open base.toml | get palette)
 
-	let darkness = 0.210
+	let darkness = 0.219
 	let lightness = 0.076
-	let saturation = 0.247
-	let mix = 0.3
+	let saturation = 0.06
+	let mix = 0.33
 
 	let error = (
 							$base.error 
 							| pastel mix --fraction $mix $base.accent 
 							| pastel desaturate $saturation
-							| pastel darken $darkness
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
@@ -252,7 +250,7 @@ export def light [] {
 							$base.info 
 							| pastel mix --fraction $mix $base.accent 
 							| pastel desaturate $saturation
-							| pastel darken $darkness
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
@@ -272,14 +270,13 @@ export def light [] {
 							)
 	let content_accent = (
 							$base.accent 
-							| pastel desaturate $saturation
-							| pastel lighten $lightness
 							| pastel format hex
 							| str trim
 							)
 	let content_minor = (
 							$base.normal
-							| pastel darken ($darkness * 2)
+							| pastel mix --fraction $mix $base.backdrop 
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
@@ -287,7 +284,8 @@ export def light [] {
 							$base.focus
 							| pastel mix --fraction $mix $content_normal
 							| pastel mix --fraction $mix $base.important
-							| pastel lighten $lightness
+							| pastel desaturate $saturation 
+							| pastel darken $darkness
 							| pastel format hex
 							| str trim
 							)
@@ -295,84 +293,75 @@ export def light [] {
 							$base.focus
 							| pastel mix --fraction $mix $content_normal
 							| pastel mix --fraction $mix $base.important
-							| pastel darken $darkness
+							| pastel desaturate $saturation 
+							| pastel lighten $lightness 
 							| pastel format hex
 							| str trim
 							)
 	let content_important_local = (
 							$base.important
 							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten $lightness
+							| pastel mix --fraction $mix $base.accent
+							| pastel desaturate $saturation 
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
 	let content_important_global = (
 							$base.important
 							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel lighten ($lightness * 3)
+							| pastel mix --fraction $mix $base.accent
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
 
 
 	let ui_normal = (
-							$base.normal 
-							| pastel darken ($darkness * 2)
+							$content_normal
+							| pastel darken $darkness 
 							| pastel format hex
 							| str trim
 							)
 	let ui_backdrop = (
-							$base.normal
-							| pastel darken ($darkness * 4)
+							$content_backdrop
+							| pastel lighten $lightness 
 							| pastel format hex
 							| str trim
 							)
 	let ui_accent = (
-							$base.accent 
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten $lightness
+							$content_accent 
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
 	let ui_minor = (
-							$base.normal 
-							| pastel darken ($darkness * 3)
+							$content_minor 
+							| pastel lighten $lightness 
 							| pastel format hex
 							| str trim
 							)
 	let ui_focus = (
-							$base.focus 
+							$content_focus 
 							| pastel desaturate $saturation
-							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel darken $darkness
 							| pastel format hex
 							| str trim
 							)
 	let ui_unfocus = (
-							$base.focus 
+							$content_focus 
 							| pastel desaturate $saturation
-							| pastel mix --fraction $mix $content_normal
-							| pastel mix --fraction $mix $base.important
-							| pastel darken ($darkness * 2)
 							| pastel format hex
 							| str trim
 							)
 	let ui_important_local = (
-							$base.important
-							| pastel mix --fraction $mix $content_normal
-							| pastel desaturate ($saturation * 2)
+							$content_important_local
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)
 	let ui_important_global = (
-							$base.important
-							| pastel mix --fraction $mix $content_normal
-							| pastel desaturate ($saturation * 2)
-							| pastel lighten ($lightness * 2)
+							$content_important_global
+							| pastel desaturate $saturation 
 							| pastel format hex
 							| str trim
 							)

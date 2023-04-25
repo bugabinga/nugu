@@ -33,8 +33,13 @@ helix: build
 	mkdir {{output}}/helix
 	use helix.nu; helix theme dark  | save --raw {{output}}/helix/nugu-dark.toml
 	use helix.nu; helix theme light | save --raw {{output}}/helix/nugu-light.toml
+	cp {{output}}/helix/nugu-dark.toml ~/.config/helix/themes/nugu-dark.toml
+	cp {{output}}/helix/nugu-light.toml ~/.config/helix/themes/nugu-light.toml
 
 wezterm: build
 	rm --force --recursive {{output}}/wezterm
 	mkdir {{output}}/wezterm
 	use wezterm.nu; wezterm theme | save --raw {{output}}/wezterm/nugu.lua
+	cp {{output}}/wezterm/nugu.lua ~/.config/wezterm/bugabinga/nugu.lua
+
+install: helix wezterm

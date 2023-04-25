@@ -1,6 +1,12 @@
 use palette.nu
 
-def brighten [] { pastel lighten 0.1 | pastel desaturate 0.1 | pastel format hex | str trim }
+def brighten [ mode:string ] {
+  if $mode == "dark" {
+    pastel lighten 0.1 | pastel desaturate 0.1 | pastel format hex | str trim
+  } else  {
+   pastel darken 0.1 | pastel desaturate 0.1 | pastel format hex | str trim 
+  }
+}
 
 def wezterm_theme [ mode:string ] {
   let nugu = ( palette nugu $mode )
@@ -23,11 +29,11 @@ def wezterm_theme [ mode:string ] {
     -- cursor and the cursor style is set to Block
     cursor_bg = '($nugu.palette.ui.accent)',
     -- Overrides the text color when the current cell is occupied by the cursor
-    cursor_fg = '($nugu.palette.ui.important_local)',
+    cursor_fg = '($nugu.palette.ui.important_global)',
     -- Specifies the border color of the cursor when the cursor style is set to Block,
     -- or the color of the vertical or horizontal bar when the cursor style is set to
     -- Bar or Underline.
-    cursor_border = '($nugu.palette.ui.minor)',
+    cursor_border = '($nugu.palette.ui.accent)',
 
     -- the foreground color of selected text
     selection_fg = '($nugu.palette.ui.important_local)',
@@ -52,14 +58,14 @@ def wezterm_theme [ mode:string ] {
     },
 
     brights = {
-      '($black | brighten)',
-      '($red | brighten)',
-      '($green | brighten)',
-      '($yellow | brighten)',
-      '($blue | brighten)',
-      '($magenta | brighten)',
-      '($cyan | brighten)',
-      '($white | brighten)',
+      '($black | brighten $mode)',
+      '($red | brighten $mode)',
+      '($green | brighten $mode)',
+      '($yellow | brighten $mode)',
+      '($blue | brighten $mode)',
+      '($magenta | brighten $mode)',
+      '($cyan | brighten $mode)',
+      '($white | brighten $mode)',
     },
 
     -- Since: 20220319-142410-0fcdea07

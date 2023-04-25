@@ -1,16 +1,11 @@
-def brighten [] {
-  pastel color | pastel lighten 0.33 | pastel desaturate 0.33 | pastel format hex
-}
-
 def to-divs [] {
   select 0 |
   transpose name value |
   each { | color |
-  let bright = ($color.value | brighten | str trim)
-  $"<div class='color_rect' style='background-color: ($color.value)'>
-  <span class='color_name grow' onclick='copy\(\"($color.value)\"\)'>($color.name) ($color.value)</span>
-  <span class='color_name grow' onclick='copy\(\"($bright)\"\)' style='color:white; background-color: ($bright)'>🔆 ($bright)</span>
-  </div>"
+    $"
+    <div class='color_rect' style='background-color: ($color.value)'>
+    <span class='color_name grow' onclick='copy\(\"($color.value)\"\)'>($color.name) ($color.value)</span>
+    </div>"
   } |
   str join (char newline)
 }
@@ -42,7 +37,7 @@ export def html [ theme: string ] {
   }
   h1, h2 {
     font-family: serif;
-    color: $normal;
+    color: ($normal);
   }
   h1::before {
     content: '# ';
@@ -69,10 +64,10 @@ export def html [ theme: string ] {
     font-family: monospace;
     font-weight: bold;
     font-size: smaller;
-    color: white;
+    color: ($backdrop);
     opacity: 0.66;
     border-radius: 8px;
-    background-color: $normal;
+    background-color: ($normal);
     padding: 8px;
     place-self: end;
   }
@@ -81,7 +76,7 @@ export def html [ theme: string ] {
   }
   .grow:hover {
     cursor: pointer;
-    border: $normal 2px solid;
+    border: ($normal) 2px solid;
     transform: scale\(1.666\);
     z-index: 999;
   }
