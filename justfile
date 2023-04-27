@@ -25,8 +25,8 @@ html: build
 	use site.nu; site html dark  | save --raw {{output}}/site-dark.html
 
 open: html
-	firefox --new-window {{output}}/site-dark.html
-	firefox --new-window {{output}}/site-light.html
+	firefox --new-tab {{output}}/site-dark.html
+	firefox --new-tab {{output}}/site-light.html
 
 helix: build
 	rm --force --recursive {{output}}/helix
