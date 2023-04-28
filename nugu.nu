@@ -178,15 +178,13 @@ export def dark [] {
 							)
 	let ui_accent = (
 							$content_accent 
-							| pastel darken $darkness 
 							| pastel desaturate $saturation
 							| pastel format hex
 							| str trim
 							)
 	let ui_minor = (
-							$content_normal 
+							$content_minor 
 							| pastel darken $darkness 
-							| pastel desaturate $saturation
 							| pastel format hex
 							| str trim
 							)
@@ -219,7 +217,26 @@ export def dark [] {
 							| str trim
 							)
 
-	make-palette $base.debug $error $warning $info $content_normal $content_backdrop $content_accent $content_minor $content_focus $content_unfocus $content_important_local $content_important_global $ui_normal $ui_backdrop $ui_accent $ui_minor $ui_focus $ui_unfocus $ui_important_local $ui_important_global
+	(make-palette $base.debug
+                $error
+                $warning
+                $info
+                $content_normal
+                $content_backdrop
+                $content_accent
+                $content_minor
+                $content_focus
+                $content_unfocus
+                $content_important_local
+                $content_important_global
+                $ui_normal
+                $ui_backdrop
+                $ui_accent
+                $ui_minor
+                $ui_focus
+                $ui_unfocus
+                $ui_important_local
+                $ui_important_global)
 }
 
 export def light [] {
@@ -366,5 +383,25 @@ export def light [] {
 							| str trim
 							)
 
-	make-palette $base.debug $error $warning $info $content_normal $content_backdrop $content_accent $content_minor $content_focus $content_unfocus $content_important_local $content_important_global $ui_normal $ui_backdrop $ui_accent $ui_minor $ui_focus $ui_unfocus $ui_important_local $ui_important_global
+	(make-palette
+		  					$base.debug
+		  					$error
+		  					$warning
+		  					$info
+		  					$content_normal
+		  					$content_backdrop
+		  					$content_accent
+		  					$content_minor
+		  					$content_focus
+		  					$content_unfocus
+		  					$content_important_local
+		  					$content_important_global
+		  					$ui_normal
+		  					$ui_backdrop
+		  					$ui_accent
+		  					$ui_minor
+		  					$ui_focus
+		  					$ui_unfocus
+		  					$ui_important_local
+		  					$ui_important_global)
 }

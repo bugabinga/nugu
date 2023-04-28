@@ -35,6 +35,7 @@ helix: build
 	use helix.nu; helix theme light | save --raw {{output}}/helix/nugu-light.toml
 	cp {{output}}/helix/nugu-dark.toml ~/.config/helix/themes/nugu-dark.toml
 	cp {{output}}/helix/nugu-light.toml ~/.config/helix/themes/nugu-light.toml
+	pkill -USR1 hx
 
 wezterm: build
 	rm --force --recursive {{output}}/wezterm
