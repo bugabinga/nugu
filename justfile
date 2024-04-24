@@ -8,11 +8,15 @@ lint:
 	open nugu.nu | nu-check --as-module --debug nugu.nu
 	open site.nu | nu-check --as-module --debug site.nu
 	open helix.nu | nu-check --as-module --debug helix.nu
+	open wezterm.nu | nu-check --as-module --debug wezterm.nu
 
 fmt: lint
 	taplo fmt
 
 output := 'output'
+
+show THEME:
+	use nugu.nu; nugu print-colors (nugu {{THEME}})
 
 build: fmt
 	rm --force --recursive {{output}}
