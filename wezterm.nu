@@ -1,10 +1,13 @@
 use palette.nu
 
+# FIXME: change style of generation to palette only, like with nwovim
+# then wezterm can consume the palette and do advanced shit with it
+
 def brighten [ mode:string ] {
   if $mode == "dark" {
-    pastel lighten 0.1 | pastel desaturate 0.1 | pastel format hex | str trim
+    pastel lighten 0.1 | pastel desaturate 0.1 | pastel format hex | ansi strip
   } else  {
-   pastel darken 0.1 | pastel desaturate 0.1 | pastel format hex | str trim 
+   pastel darken 0.1 | pastel desaturate 0.1 | pastel format hex | ansi strip
   }
 }
 
@@ -29,15 +32,13 @@ def wezterm_theme [ mode:string ] {
     -- cursor and the cursor style is set to Block
     cursor_bg = '($nugu.palette.ui.accent)',
     -- Overrides the text color when the current cell is occupied by the cursor
-    cursor_fg = '($nugu.palette.ui.important_global)',
+    cursor_fg = '($nugu.palette.ui.backdrop)',
     -- Specifies the border color of the cursor when the cursor style is set to Block,
     -- or the color of the vertical or horizontal bar when the cursor style is set to
     -- Bar or Underline.
     cursor_border = '($nugu.palette.ui.accent)',
 
-    -- the foreground color of selected text
-    selection_fg = '($nugu.palette.ui.important_local)',
-    -- the background color of selected text
+    selection_fg = '($nugu.palette.ui.backdrop)',
     selection_bg = '($nugu.palette.ui.focus)',
 
     -- The color of the scrollbar 'thumb'; the portion that represents the current viewport
@@ -68,10 +69,6 @@ def wezterm_theme [ mode:string ] {
       '($white | brighten $mode)',
     },
 
-    -- Since: 20220319-142410-0fcdea07
-    -- When the IME, a dead key or a leader key are being processed and are effectively
-    -- holding input pending the result of input composition, change the cursor
-    -- to this color to give a visual cue about the compose state.
     compose_cursor = '($nugu.palette.ui.focus)',
     visual_bell = '($nugu.palette.ui.important_global)',
   }"

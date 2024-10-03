@@ -39,7 +39,7 @@ helix: build
 	use helix.nu; helix theme light | save --raw {{output}}/helix/nugu-light.toml
 	cp {{output}}/helix/nugu-dark.toml ~/.config/helix/themes/nugu-dark.toml
 	cp {{output}}/helix/nugu-light.toml ~/.config/helix/themes/nugu-light.toml
-	pkill -USR1 hx
+	try { pkill -USR1 hx }
 
 wezterm: build
 	rm --force --recursive {{output}}/wezterm
@@ -47,4 +47,13 @@ wezterm: build
 	use wezterm.nu; wezterm theme | save --raw {{output}}/wezterm/nugu.lua
 	cp {{output}}/wezterm/nugu.lua ~/.config/wezterm/bugabinga/nugu.lua
 
-install: helix wezterm
+neovim: build
+	rm --force --recursive {{output}}/neovim
+	mkdir {{output}}/neovim
+	use neovim.nu; neovim theme dark | save --raw {{output}}/neovim/palette_dark.lua
+	use neovim.nu; neovim theme light | save --raw {{output}}/neovim/palette_light.lua
+	cp {{output}}/neovim/palette_dark.lua ~/.config/nvim/lua/bugabinga/nugu/palette_dark.lua
+	cp {{output}}/neovim/palette_light.lua ~/.config/nvim/lua/bugabinga/nugu/palette_light.lua
+	try { pkill -USR1 nvim }
+
+install: helix wezterm neovim
