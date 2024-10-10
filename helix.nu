@@ -1,5 +1,7 @@
 use palette.nu
 
+# FIXME: only generate palette here, leave the rest to helix config
+
 export def theme [ mode:string ] {
   let nugu = (palette nugu $mode)
   let helix_palette = {

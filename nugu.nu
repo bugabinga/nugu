@@ -1,19 +1,82 @@
+def print-block [ color: string ] {
+
+	let color_escape = {
+		fg: $color
+		bg: $color
+	}
+
+	print --no-newline $"(ansi --escape $color_escape)██(ansi reset)"
+}
+
 export def print-colors [theme: record] {
-	echo "PALETTE"
-		$theme.palette | reject content ui | select 0 | transpose name value | each { |color|
-			echo $"NAME: ($color.name)"
-				pastel color $color.value
+	let mat = [
+		[
+			$theme.palette.debug
+			$theme.palette.error
+			$theme.palette.warning
+			$theme.palette.info
+			null
+			null
+			null
+			null
+		]
+		[
+			$theme.palette.content.normal
+			$theme.palette.content.backdrop
+			$theme.palette.content.accent
+			$theme.palette.content.minor
+			$theme.palette.content.focus
+			$theme.palette.content.unfocus
+			$theme.palette.content.important_local
+			$theme.palette.content.important_global
+		]
+		[
+			$theme.palette.ui.normal
+			$theme.palette.ui.backdrop
+			$theme.palette.ui.accent
+			$theme.palette.ui.minor
+			$theme.palette.ui.focus
+			$theme.palette.ui.unfocus
+			$theme.palette.ui.important_local
+			$theme.palette.ui.important_global
+		]
+	]
+	# FIXME: shirley, there is some clever way to create the matrix from the tree?
+
+	let width = $mat | get 0 | length
+	let height = $mat | length
+	# FIXME: the math below is beautifully wrong and only happens to work
+	# when pad is == 1, don't care right now..
+	let pad = 1
+	let size = (term size | get columns) // ($width + $width + $pad + $pad)
+	let padded_size = $size + $pad
+
+	let scaled_width = ($width * $padded_size) - $pad
+	let scaled_height = ($height * $padded_size) - $pad
+
+	let bg = "#000000"
+
+	for y in 0..$scaled_height {
+		for x in 0..$scaled_width {
+			let pad_x = $x mod $padded_size
+			let pad_y = $y mod $padded_size
+			if ($pad_x == $padded_size - 1 or $pad_y == $padded_size - 1 ) {
+				print-block $bg
+			} else {
+				let color_x = ($x // $padded_size) mod $width
+				let color_y = ($y // $padded_size) mod $height
+				let color = $mat | get $color_y | get $color_x
+				if ($color | is-not-empty) {
+					print-block $color
+				} else {
+					print-block $bg
+				}
+			}
 		}
-	echo "CONTENT"
-		$theme.palette.content | select 0 | transpose name value | each { |color|
-			echo $"NAME: ($color.name)"
-				pastel color $color.value
-		}
-	echo "UI"
-		$theme.palette.ui | select 0 | transpose name value | each { |color|
-			echo $"NAME: ($color.name)"
-				pastel color $color.value
-		}
+		# it is amazingly difficult to print only one newline
+		# print --no-newline (char nl)
+		print ""
+	}
 }
 
 def make-palette [
@@ -91,10 +154,11 @@ def new [
 	--light # make the light variant
 ] {
 	let base = (open base.toml | get palette)
-	def normal_flux [ c: float=0.0190 d:float=0.0087 ] { if $light { flux $c $d --light } else { flux $c $d  } }
-	def inverted_flux [ c: float=0.0076 d:float=0.0006 ] { if $light { flux $c $d } else { flux $c $d --light } }
+	def normal_flux [ --c: float=0.169 --d:float=0.169 ] { if $light { flux $c $d --light } else { flux $c $d  } }
+	def inverted_flux [ --c: float=0.069 --d:float=0.069 ] { if $light { flux $c $d } else { flux $c $d --light } }
 
 	let normal = if $light { $base.backdrop } else { $base.normal }
+
 	let backdrop = if $light { $base.normal } else { $base.backdrop }
 
 	let error = (
@@ -122,7 +186,7 @@ def new [
 	)
 	let content_accent = (
 		$base.accent
-		| normal_flux 0.069 0.001
+		| normal_flux --c 0
 	)
 	let content_minor = (
 		$normal
@@ -133,13 +197,13 @@ def new [
 		$base.focus
 		| mix $content_normal
 		| mix $base.important
-		| normal_flux
+		| normal_flux --c 0.042 --d 0.42
 	)
 	let content_unfocus = (
 		$base.focus
 		| mix $content_backdrop
 		| mix $base.important
-		| normal_flux
+		| normal_flux --c 0.069 --d 0.69
 	)
 	let content_important_local = (
 		$base.important
@@ -153,7 +217,7 @@ def new [
 		| mix $content_normal
 		| mix $base.important
 		| mix $base.accent
-		| normal_flux
+		| normal_flux --c 0
 	)
 	let ui_normal = (
 		$content_normal
@@ -165,7 +229,7 @@ def new [
 	)
 	let ui_accent = (
 		$content_accent
-		| normal_flux 0.069 0.001
+		| normal_flux
 	)
 	let ui_minor = (
 		$content_minor
@@ -177,7 +241,7 @@ def new [
 	)
 	let ui_unfocus = (
 		$content_unfocus
-		| normal_flux 0.0 0.42
+		| normal_flux
 	)
 	let ui_important_local = (
 		$content_important_local

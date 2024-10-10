@@ -44,8 +44,10 @@ helix: build
 wezterm: build
 	rm --force --recursive {{output}}/wezterm
 	mkdir {{output}}/wezterm
-	use wezterm.nu; wezterm theme | save --raw {{output}}/wezterm/nugu.lua
-	cp {{output}}/wezterm/nugu.lua ~/.config/wezterm/bugabinga/nugu.lua
+	use wezterm.nu; wezterm theme dark | save --raw {{output}}/wezterm/palette_dark.lua
+	use wezterm.nu; wezterm theme light | save --raw {{output}}/wezterm/palette_light.lua
+	cp {{output}}/wezterm/palette_dark.lua ~/.config/wezterm/bugabinga/nugu/palette_dark.lua
+	cp {{output}}/wezterm/palette_light.lua ~/.config/wezterm/bugabinga/nugu/palette_light.lua
 
 neovim: build
 	rm --force --recursive {{output}}/neovim
