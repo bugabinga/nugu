@@ -229,7 +229,7 @@ def new [
 	)
 	let ui_accent = (
 		$content_accent
-		| normal_flux
+		| normal_flux --c 0 --d 0.42
 	)
 	let ui_minor = (
 		$content_minor
