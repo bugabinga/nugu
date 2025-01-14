@@ -154,11 +154,10 @@ def new [
 	--light # make the light variant
 ] {
 	let base = (open base.toml | get palette)
-	def normal_flux [ --c: float=0.169 --d:float=0.169 ] { if $light { flux $c $d --light } else { flux $c $d  } }
+	def normal_flux [ --c: float=0.069 --d:float=0.069 ] { if $light { flux $c $d --light } else { flux $c $d  } }
 	def inverted_flux [ --c: float=0.069 --d:float=0.069 ] { if $light { flux $c $d } else { flux $c $d --light } }
 
 	let normal = if $light { $base.backdrop } else { $base.normal }
-
 	let backdrop = if $light { $base.normal } else { $base.backdrop }
 
 	let error = (
