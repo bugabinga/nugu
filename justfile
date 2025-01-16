@@ -1,5 +1,8 @@
 set shell := [ "nu", "--commands" ]
 
+neovim_config_dir :=  if os_family() == "windows" { "~/AppData/Local/nvim" } else { "~/.config/nvim" }
+helix_config_dir :=  if os_family() == "windows" { "~/AppData/Roaming/helix" } else { "~/.config/helix" }
+
 default:
 	@just --list
 
@@ -37,8 +40,8 @@ helix: build
 	mkdir {{output}}/helix
 	use helix.nu; helix theme dark  | save --raw {{output}}/helix/nugu-dark.toml
 	use helix.nu; helix theme light | save --raw {{output}}/helix/nugu-light.toml
-	cp {{output}}/helix/nugu-dark.toml ~/.config/helix/themes/nugu-dark.toml
-	cp {{output}}/helix/nugu-light.toml ~/.config/helix/themes/nugu-light.toml
+	cp {{output}}/helix/nugu-dark.toml {{helix_config_dir}}/themes/nugu-dark.toml
+	cp {{output}}/helix/nugu-light.toml {{helix_config_dir}}/helix/themes/nugu-light.toml
 	try { pkill -USR1 hx }
 
 wezterm: build
@@ -54,8 +57,8 @@ neovim: build
 	mkdir {{output}}/neovim
 	use neovim.nu; neovim theme dark | save --raw {{output}}/neovim/palette_dark.lua
 	use neovim.nu; neovim theme light | save --raw {{output}}/neovim/palette_light.lua
-	cp {{output}}/neovim/palette_dark.lua ~/.config/nvim/lua/bugabinga/nugu/palette_dark.lua
-	cp {{output}}/neovim/palette_light.lua ~/.config/nvim/lua/bugabinga/nugu/palette_light.lua
+	cp {{output}}/neovim/palette_dark.lua {{neovim_config_dir}}/lua/bugabinga/nugu/palette_dark.lua
+	cp {{output}}/neovim/palette_light.lua {{neovim_config_dir}}/lua/bugabinga/nugu/palette_light.lua
 	try { pkill -USR1 nvim }
 
 install: helix wezterm neovim
