@@ -168,12 +168,12 @@ def new [
 	let warning = (
 		$base.warning
 		| mix $base.accent
-		| inverted_flux --c 0.42
+		| inverted_flux --c 0.042
 	)
 	let info = (
 		$base.info
 		| mix $base.accent
-		| normal_flux
+		| inverted_flux --c 0.042
 	)
 	let content_normal = (
 		$normal
